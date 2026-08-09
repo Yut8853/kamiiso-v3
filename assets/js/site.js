@@ -729,9 +729,9 @@ function initializeKineticKeywords() {
   let travelTime = 0;
   let lastElapsed = 0;
   const palette = [
-    ['#f8d7bf', '#fff7bd', '#d9e3dd'],
-    ['#dce6de', '#fffdef', '#f4ccb8'],
-    ['#fff0b7', '#e8eef4', '#f8d7bf'],
+    ['#fbf4e2', '#f4e6cd', '#efd3c2'],
+    ['#f6ecd6', '#fffdef', '#f0d9c6'],
+    ['#f3e2cf', '#faf2e0', '#eccbb8'],
   ];
 
   const makeTexture = (card, index) => {
