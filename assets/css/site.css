@@ -122,7 +122,7 @@ img {
   box-shadow: 0 22px 40px rgb(52 38 24 / 0.18);
 }
 .kv-photo-float {
-  animation: kv-drift 20s ease-in-out var(--float-delay, 0s) infinite;
+  animation: kv-drift 30s ease-in-out var(--float-delay, 0s) infinite;
   will-change: transform;
 }
 @keyframes kv-drift {
@@ -131,7 +131,7 @@ img {
     transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(0, -6px, 0);
+    transform: translate3d(0, -3px, 0);
   }
 }
 /* Base placements (JS re-randomises within protected bounds) */
@@ -187,23 +187,25 @@ img {
   position: absolute;
   aspect-ratio: 1 / 1;
   background: transparent center / contain no-repeat;
-  animation: kv-drift 24s ease-in-out var(--float-delay, 0s) infinite;
+  animation: kv-drift 34s ease-in-out var(--float-delay, 0s) infinite;
   transform-origin: 50% 50%;
+  opacity: 0.7;
   will-change: transform;
 }
 .kv-decor.is-fading {
   opacity: 0;
 }
-.kv-dot--01 { top: 45%; left: 12%; width: 3rem; }
-.kv-dot--02 { bottom: 24%; left: 25%; width: 3.5rem; }
-.kv-dot--03 { top: 44%; right: 19%; width: 3.5rem; }
-.kv-dot--04 { right: 5%; bottom: 13%; width: 3rem; }
-.kv-dot--05 { top: 29%; left: 48%; width: 2.75rem; }
-.kv-dot--06 { top: 58%; right: 12%; width: 4rem; }
-.kv-dot--07 { bottom: 35%; left: 8%; width: 2.5rem; }
-.kv-dot--08 { top: 24%; right: 35%; width: 2.9rem; }
-.kv-dot--09 { right: 31%; bottom: 21%; width: 3.25rem; }
-.kv-dot--10 { top: 64%; left: 31%; width: 2.35rem; }
+.kv-dot--01 { top: 45%; left: 10%; width: 2.6rem; }
+.kv-dot--02 { bottom: 22%; left: 24%; width: 2.8rem; }
+.kv-dot--03 { top: 44%; right: 17%; width: 2.8rem; }
+.kv-dot--04 { right: 5%; bottom: 13%; width: 2.5rem; }
+.kv-dot--05 { top: 27%; left: 49%; width: 2.3rem; }
+.kv-dot--06 { top: 60%; right: 12%; width: 3rem; }
+/* trim the noisier small dots — the KV reads calmer with fewer specks */
+.kv-dot--07,
+.kv-dot--08,
+.kv-dot--09,
+.kv-dot--10 { display: none; }
 
 .kv-content {
   position: relative;
@@ -219,12 +221,24 @@ img {
   text-align: center;
 }
 .kv-message {
+  position: relative;
   width: 100%;
-  max-width: 30rem;
-  padding: 2.25rem 1.5rem;
-  border-radius: 46% 54% 48% 52% / 20% 22% 20% 22%;
-  background: color-mix(in oklab, var(--paper) 92%, transparent);
-  backdrop-filter: blur(2px);
+  max-width: 34rem;
+  padding: 1rem 0.5rem;
+}
+/* soft paper halo keeps copy legible over the KV without a hard frame */
+.kv-message::before {
+  content: '';
+  position: absolute;
+  inset: -12% -18%;
+  z-index: -1;
+  background: radial-gradient(
+    62% 58% at 50% 46%,
+    color-mix(in oklab, var(--paper) 88%, transparent) 0%,
+    color-mix(in oklab, var(--paper) 60%, transparent) 46%,
+    transparent 72%
+  );
+  pointer-events: none;
 }
 .kv-eyebrow {
   margin-bottom: 1.25rem;
@@ -235,10 +249,10 @@ img {
 }
 .kv-title {
   font-family: var(--font-serif);
-  font-size: clamp(1.9rem, 5.4vw, 3.15rem);
-  font-weight: 700;
-  line-height: 1.7;
-  letter-spacing: 0.08em;
+  font-size: clamp(2rem, 5.6vw, 3.35rem);
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
   color: var(--ink);
   text-wrap: balance;
 }
@@ -342,13 +356,26 @@ img {
   letter-spacing: 0.12em;
 }
 .menu-button {
-  width: 3rem;
-  height: 3rem;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding-inline: 1rem;
   justify-content: center;
-  color: var(--primary);
-  transition: opacity 0.22s ease;
+  border: 1px solid var(--line-strong);
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--paper) 82%, transparent);
+  color: var(--ink);
+  transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease;
 }
-.menu-button:hover { opacity: 0.65; }
+.menu-button__icon { width: 1.15rem; height: 1.15rem; }
+.menu-button__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+.menu-button:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
 
 .global-nav {
   position: fixed;
@@ -474,26 +501,26 @@ img {
   pointer-events: none;
 }
 .site-loader__inner {
-  width: min(24rem, calc(100vw - 3rem));
+  width: min(17rem, calc(100vw - 3rem));
   text-align: center;
 }
 .site-loader__eyebrow {
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.3em;
 }
 .site-loader__title {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-family: var(--font-serif);
-  font-size: clamp(2.1rem, 9vw, 4rem);
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   line-height: 1;
 }
 .site-loader__meter {
-  height: 3px;
-  margin-top: 2rem;
+  height: 2px;
+  margin-top: 1.5rem;
   overflow: hidden;
   background: var(--line);
 }
@@ -608,10 +635,15 @@ img {
 .about-tagline {
   margin-top: 2rem;
   font-family: var(--font-serif);
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 600;
-  line-height: 1.9;
+  font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
   color: var(--ink);
+}
+.about-tagline em {
+  font-style: normal;
+  color: var(--primary);
 }
 .about-text {
   max-width: 34rem;
@@ -741,7 +773,7 @@ img {
    ========================================================================== */
 .interview-grid {
   display: grid;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
+  gap: clamp(2rem, 4vw, 3rem);
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 .interview-card {
@@ -749,17 +781,17 @@ img {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--primary);
-  border-radius: 4px;
-  background: var(--card);
-  box-shadow: 0 1px 0 rgb(32 27 22 / 0.04);
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  border: 1px solid var(--line-strong);
+  border-top: 4px solid var(--primary);
+  border-radius: 6px;
+  background: #fffef7;
+  box-shadow: 0 10px 30px rgb(52 38 24 / 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .interview-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 24px 46px rgb(52 38 24 / 0.1);
+  box-shadow: 0 26px 50px rgb(52 38 24 / 0.14);
 }
 .interview-card__head {
   position: relative;
@@ -1546,9 +1578,9 @@ img {
    ========================================================================== */
 @media (min-width: 48rem) {
   .kv-hero { min-height: max(100svh, 44rem); padding-top: 5rem; }
-  .kv-content { min-height: 46rem; padding: 6rem 1.5rem; }
-  .kv-message { padding: 3rem 2rem; }
-  .kv-title { line-height: 1.85; }
+  .kv-content { min-height: 46rem; padding: 6rem 1.5rem; max-width: 52rem; }
+  .kv-message { padding: 1.5rem 1rem; max-width: 38rem; }
+  .kv-title { line-height: 1.6; }
 
   .site-header__inner { height: 6rem; padding-inline: 2.5rem; }
   .site-logo__image { width: 168px; }
@@ -1583,10 +1615,10 @@ img {
     padding-left: max(0px, calc(50vw - 41rem));
   }
 
-  .interview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .interview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
   .interview-grid > .reveal:nth-child(even),
-  .interview-card:nth-child(even) { transform: translateY(2.5rem); }
-  .interview-card:nth-child(even):hover { transform: translateY(calc(2.5rem - 4px)); }
+  .interview-card:nth-child(even) { transform: translateY(1.5rem); }
+  .interview-card:nth-child(even):hover { transform: translateY(calc(1.5rem - 4px)); }
 
   .keyword-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
   .keyword-card:nth-child(4n + 1) { background: var(--card); }

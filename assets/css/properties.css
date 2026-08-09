@@ -84,11 +84,11 @@
   --input: #dedcda;
   --ring: #141414;
   --radius: 0.75rem;
-  --ink: #201b16;
-  --ink-soft: #4a433b;
-  --ink-mute: #6f675d;
-  --line: rgba(32, 27, 22, 0.14);
-  --line-strong: rgba(32, 27, 22, 0.28);
+  --ink: #14110d;
+  --ink-soft: #24201b;
+  --ink-mute: #4c4740;
+  --line: rgba(32, 27, 22, 0.16);
+  --line-strong: rgba(32, 27, 22, 0.3);
   --paper: #fffdef;
   --paper-2: #f6f1dd;
 }

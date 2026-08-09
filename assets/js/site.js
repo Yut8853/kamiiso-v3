@@ -551,27 +551,27 @@ function setRandomDotDecor(dot, placement, imagePath) {
   dot.style.width = isLargeDot ? `${size}vw` : `${size}rem`;
   dot.style.height = isLargeDot ? 'auto' : `${size}rem`;
   const floatX = isLargeDot
-    ? randomSignedBetween(34, 58)
-    : randomSignedBetween(18, 34);
-  const floatY = isLargeDot ? -randomBetween(34, 64) : -randomBetween(22, 42);
+    ? randomSignedBetween(6, 12)
+    : randomSignedBetween(4, 8);
+  const floatY = isLargeDot ? -randomBetween(8, 14) : -randomBetween(5, 10);
   dot.style.removeProperty('rotate');
-  dot.style.setProperty('--dot-rotate', `${randomBetween(-13, 13)}deg`);
-  dot.style.setProperty('--float-delay', `${randomBetween(-7, 0)}s`);
-  dot.style.setProperty('--float-duration', `${randomBetween(7, 11)}s`);
+  dot.style.setProperty('--dot-rotate', `${randomBetween(-6, 6)}deg`);
+  dot.style.setProperty('--float-delay', `${randomBetween(-9, 0)}s`);
+  dot.style.setProperty('--float-duration', `${randomBetween(12, 18)}s`);
   dot.style.setProperty('--float-x', `${floatX}px`);
   dot.style.setProperty('--float-y', `${floatY}px`);
-  dot.style.setProperty('--float-x-mid', `${floatX * -0.55}px`);
+  dot.style.setProperty('--float-x-mid', `${floatX * -0.5}px`);
   dot.style.setProperty('--float-y-mid', `${floatY * 0.45}px`);
-  dot.style.setProperty('--float-x-end', `${floatX * 0.35}px`);
-  dot.style.setProperty('--float-y-end', '8px');
-  dot.style.setProperty('--float-rotate', `${randomSignedBetween(4, 8)}deg`);
+  dot.style.setProperty('--float-x-end', `${floatX * 0.3}px`);
+  dot.style.setProperty('--float-y-end', '3px');
+  dot.style.setProperty('--float-rotate', `${randomSignedBetween(1.5, 3)}deg`);
   dot.style.setProperty(
     '--float-rotate-mid',
-    `${randomSignedBetween(3, 6)}deg`
+    `${randomSignedBetween(1, 2)}deg`
   );
   dot.style.setProperty(
     '--float-rotate-end',
-    `${randomSignedBetween(2, 4)}deg`
+    `${randomSignedBetween(0.5, 1.5)}deg`
   );
 }
 
@@ -1281,7 +1281,7 @@ async function initializeParticles() {
   const phases = new Float32Array(count);
   const speeds = new Float32Array(count);
   const scales = new Float32Array(count);
-  const palette = ['#f6a9b8', '#f8d98a', '#a9d8c8', '#9fc9ee', '#f7c8a6'].map(
+  const palette = ['#e7cfb4', '#efdcc4', '#e3b9a0', '#f2e6cf', '#d8bfa4'].map(
     color => new THREE.Color(color)
   );
   for (let i = 0; i < count; i++) {
@@ -1296,8 +1296,8 @@ async function initializeParticles() {
       i * 3
     );
     phases[i] = Math.random() * Math.PI * 2;
-    speeds[i] = 0.05 + Math.random() * 0.12;
-    scales[i] = 0.06 + Math.random() * 0.14;
+    speeds[i] = 0.02 + Math.random() * 0.05;
+    scales[i] = 0.03 + Math.random() * 0.07;
     const color = palette[Math.floor(Math.random() * palette.length)];
     colors.set([color.r, color.g, color.b], i * 3);
   }
@@ -1326,13 +1326,13 @@ async function initializeParticles() {
   });
   scene.add(new THREE.Points(geometry, material));
 
-  [[3.75, -2.25, -0.4, '#f6a9b8', 0.11]].forEach(([x, y, z, color, size]) => {
+  [[3.75, -2.25, -0.4, '#e3b9a0', 0.11]].forEach(([x, y, z, color, size]) => {
     const mesh = new THREE.Mesh(
       new THREE.SphereGeometry(size, 24, 24),
       new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.42,
+        opacity: 0.22,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       })
@@ -1435,7 +1435,6 @@ initializeLoadingScreen([kvDecorReady]);
 initializeMenu();
 initializeAccordions();
 initializeTabsAndKeywords();
-initializePathDecorations();
 initializeParallax();
 initializeScrollReveal();
 initializeEnvironmentImagePreload();
