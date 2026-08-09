@@ -1344,14 +1344,15 @@ img {
   z-index: 5;
   overflow: hidden;
   padding-block: clamp(4.5rem, 9vw, 8rem);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--paper-2);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
 }
 .entry-watermark {
   position: absolute;
   right: -0.5rem;
   bottom: -3rem;
-  color: color-mix(in oklab, var(--primary-foreground) 12%, transparent);
+  color: color-mix(in oklab, var(--primary) 7%, transparent);
   font-family: var(--font-serif);
   font-size: clamp(9rem, 26vw, 22rem);
   font-weight: 800;
@@ -1374,6 +1375,7 @@ img {
 .entry-kicker {
   justify-content: center;
   gap: 1rem;
+  color: var(--primary);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -1381,7 +1383,7 @@ img {
 .entry-kicker__line {
   width: 2rem;
   height: 2px;
-  background: var(--primary-foreground);
+  background: var(--primary);
 }
 .entry-title {
   margin-top: 1.75rem;
@@ -1393,7 +1395,7 @@ img {
 .entry-lead {
   max-width: 40rem;
   margin: 1.5rem auto 0;
-  color: color-mix(in oklab, var(--primary-foreground) 85%, transparent);
+  color: var(--ink-soft);
   font-size: var(--text-base);
   line-height: 2;
 }
@@ -1421,19 +1423,21 @@ img {
   text-align: left;
 }
 .entry-button--primary {
-  background: var(--paper);
-  color: var(--primary);
-}
-.entry-button--outline {
-  background: transparent;
-  border: 1.5px solid color-mix(in oklab, var(--primary-foreground) 60%, transparent);
+  background: var(--primary);
   color: var(--primary-foreground);
 }
-.entry-button:hover { transform: translateY(-2px); }
-.entry-button--outline:hover {
+.entry-button--outline {
   background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  color: var(--ink);
+}
+.entry-button:hover { transform: translateY(-2px); }
+.entry-button--primary:hover {
+  background: color-mix(in oklab, var(--primary) 88%, #000);
+}
+.entry-button--outline:hover {
+  border-color: var(--primary);
   color: var(--primary);
-  border-color: var(--paper);
 }
 
 /* ==========================================================================
