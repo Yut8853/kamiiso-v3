@@ -39,8 +39,15 @@
     --tracking-wider: 0.05em;
     --leading-relaxed: 1.625;
     --leading-loose: 2;
-    --radius-md: calc(var(--radius) * 0.75);
-    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --radius-md: calc(var(--radius) * 0.75);
+  --font-serif:
+    'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --font-gothic:
+    'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', ui-sans-serif,
+    system-ui, sans-serif;
+  --font-noto-serif: var(--font-serif);
+  --font-zen-kaku: var(--font-gothic);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --blur-md: 12px;
     --default-transition-duration: 0.15s;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -77,6 +84,13 @@
   --input: #dedcda;
   --ring: #141414;
   --radius: 0.75rem;
+  --ink: #201b16;
+  --ink-soft: #4a433b;
+  --ink-mute: #6f675d;
+  --line: rgba(32, 27, 22, 0.14);
+  --line-strong: rgba(32, 27, 22, 0.28);
+  --paper: #fffdef;
+  --paper-2: #f6f1dd;
 }
 @supports (color: lab(0% 0 0)) {
   :root {

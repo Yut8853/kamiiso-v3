@@ -1082,11 +1082,9 @@ function initializePathDecorations() {
       gradient.setAttribute('y1', '0%');
       gradient.setAttribute('y2', '100%');
       [
-        ['0%', '#f5b8b7'],
-        ['28%', '#f7df9a'],
-        ['54%', '#c9dec1'],
-        ['78%', '#cbd8f2'],
-        ['100%', '#fffdef'],
+        ['0%', '#d61d19'],
+        ['48%', '#e0a493'],
+        ['100%', '#f3eee1'],
       ].forEach(([offset, color]) => {
         const stop = document.createElementNS(
           'http://www.w3.org/2000/svg',
