@@ -1518,7 +1518,6 @@ initializeLoadingScreen([kvDecorReady]);
 initializeMenu();
 initializeAccordions();
 initializeTabsAndKeywords();
-initializePathDecorations();
 initializeParallax();
 initializeScrollReveal();
 initializeEnvironmentImagePreload();
