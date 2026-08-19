@@ -888,7 +888,20 @@ function initializeKineticKeywords() {
   resize();
 
   const clock = new THREE.Clock();
+  let frameId = null;
+  let onScreen = true;
+  let contextLost = false;
+  const shouldRun = () => onScreen && !document.hidden && !contextLost;
+
+  const stop = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
   const render = () => {
+    frameId = null;
+    if (!shouldRun()) return;
     const elapsed = clock.getElapsedTime();
     const delta = elapsed - lastElapsed;
     lastElapsed = elapsed;
@@ -910,9 +923,38 @@ function initializeKineticKeywords() {
       mesh.material.opacity = fadeIn * fadeOut;
     });
     renderer.render(scene, camera);
-    requestAnimationFrame(render);
+    frameId = requestAnimationFrame(render);
   };
-  render();
+  const start = () => {
+    if (frameId === null && shouldRun()) {
+      lastElapsed = clock.getElapsedTime();
+      frameId = requestAnimationFrame(render);
+    }
+  };
+
+  canvas.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    contextLost = true;
+    stop();
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    contextLost = false;
+    start();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+  new IntersectionObserver(
+    entries => {
+      onScreen = entries.some(entry => entry.isIntersecting);
+      if (onScreen) start();
+      else stop();
+    },
+    { threshold: 0 }
+  ).observe(grid);
+
+  start();
 }
 
 function wrapCanvasText(context, text, x, y, maxWidth, lineHeight, maxLines) {
@@ -1372,14 +1414,53 @@ async function initializeParticles() {
   updateSizeMultiplier();
 
   const clock = new THREE.Clock();
+  let frameId = null;
+  let onScreen = true;
+  let contextLost = false;
+  const shouldRun = () => onScreen && !document.hidden && !contextLost;
+
+  const stop = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
   const render = () => {
+    frameId = null;
+    if (!shouldRun()) return;
     uniforms.uTime.value = reducedMotion ? 0 : clock.getElapsedTime();
     uniforms.uSizeMultiplier.value +=
       (targetSizeMultiplier - uniforms.uSizeMultiplier.value) * 0.08;
     renderer.render(scene, camera);
-    requestAnimationFrame(render);
+    frameId = requestAnimationFrame(render);
   };
-  render();
+  const start = () => {
+    if (frameId === null && shouldRun()) frameId = requestAnimationFrame(render);
+  };
+
+  canvas.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    contextLost = true;
+    stop();
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    contextLost = false;
+    start();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+  new IntersectionObserver(
+    entries => {
+      onScreen = entries.some(entry => entry.isIntersecting);
+      if (onScreen) start();
+      else stop();
+    },
+    { threshold: 0 }
+  ).observe(host);
+
+  start();
 }
 
 function initializeScrollReveal() {
