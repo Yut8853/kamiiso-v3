@@ -1383,17 +1383,49 @@ footer a[href]:hover svg {
   font-weight: 700;
   line-height: 2rem;
 }
-.interview-card__number {
-  position: absolute;
-  top: -2.3rem;
-  right: -0.45rem;
-  z-index: 0;
-  color: color-mix(in oklab, var(--foreground) 10%, transparent);
-  font-family: var(--font-noto-serif), ui-serif, serif;
-  font-size: clamp(7rem, 20vw, 11rem);
-  font-weight: 600;
-  line-height: 0.8;
-  pointer-events: none;
+.interview-card__thumb {
+  flex: none;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 1rem;
+  background-image: url("../images/products/product-lineup.png");
+  background-repeat: no-repeat;
+  background-size: 320%;
+  background-position: 20% 30%;
+  box-shadow: 0 8px 20px rgb(82 61 43 / 0.18);
+  rotate: -4deg;
+}
+.interview-card__thumb--01 {
+  background-position: 8% 18%;
+  rotate: -5deg;
+}
+.interview-card__thumb--02 {
+  background-position: 88% 12%;
+  rotate: 4deg;
+}
+.interview-card__thumb--03 {
+  background-position: 46% 58%;
+  rotate: -3deg;
+}
+.interview-card__thumb--04 {
+  background-position: 72% 82%;
+  rotate: 5deg;
+}
+.interview-card__thumb--05 {
+  background-position: 14% 78%;
+  rotate: -4deg;
+}
+.interview-card__thumb--06 {
+  background-position: 92% 62%;
+  rotate: 3deg;
+}
+.interview-card__thumb--07 {
+  background-position: 32% 40%;
+  rotate: -6deg;
+}
+.interview-card__thumb--08 {
+  background-position: 60% 24%;
+  rotate: 4deg;
 }
 .interview-card__meta {
   display: flex;

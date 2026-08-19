@@ -247,15 +247,25 @@ async function initializeKvRandomDecor() {
 function applyKvRandomDecor(photoBlocks, dotBlocks) {
   const shuffledPhotos = shuffleItems(kvPhotoImages);
   const shuffledDots = shuffleItems(kvDotImages);
-  const photoPlacements = shuffleItems([
-    { x: [4, 10], y: [8, 18], width: [22, 31] },
-    { x: [66, 74], y: [8, 18], width: [21, 29] },
-    { x: [30, 44], y: [-2, 1], width: [15, 20] },
-    { x: [56, 70], y: [58, 70], width: [19, 26] },
-    { x: [5, 12], y: [58, 70], width: [22, 31] },
-    { x: [34, 48], y: [70, 78], width: [21, 29] },
-  ]);
-  const occupiedPhotoRects = getKvContentProtectedRects();
+  const hero = document.querySelector('.kv-hero');
+  const heroRect = hero ? hero.getBoundingClientRect() : null;
+  const heroWidth =
+    heroRect && heroRect.width ? heroRect.width : window.innerWidth || 1180;
+  const heroHeight =
+    heroRect && heroRect.height ? heroRect.height : window.innerHeight || 812;
+
+  // Fixed, pre-computed slots that live in the side margins around the
+  // centered copy. Three photos stack down the left band and three down the
+  // right band, with generous vertical gaps so nothing overlaps the headline
+  // or another photo, and each slot gets a distinct tilt.
+  const photoSlots = [
+    { left: 2, centerY: 21, maxWidth: 21, maxHeight: 22, rotate: -6 },
+    { left: 76, centerY: 18, maxWidth: 21, maxHeight: 22, rotate: 6 },
+    { left: 3, centerY: 50, maxWidth: 18, maxHeight: 19, rotate: 5 },
+    { left: 78, centerY: 49, maxWidth: 19, maxHeight: 20, rotate: -5 },
+    { left: 2, centerY: 80, maxWidth: 21, maxHeight: 22, rotate: 8 },
+    { left: 76, centerY: 81, maxWidth: 21, maxHeight: 22, rotate: -8 },
+  ];
   const dotPlacements = shuffleItems([
     { x: [8, 18], y: [32, 47] },
     { x: [22, 34], y: [22, 38] },
@@ -275,8 +285,9 @@ function applyKvRandomDecor(photoBlocks, dotBlocks) {
     setRandomPhotoDecor(
       block,
       shuffledPhotos[index],
-      photoPlacements[index],
-      occupiedPhotoRects
+      photoSlots[index],
+      heroWidth,
+      heroHeight
     )
   );
   dotBlocks.forEach((block, index) => {
@@ -312,51 +323,47 @@ function setResponsiveBackground(element, path) {
   element.style.backgroundImage = `image-set(url("${path}.avif") type("image/avif"), url("${path}.webp") type("image/webp"))`;
 }
 
-function setRandomPhotoDecor(block, path, placement, occupiedRects) {
+function setRandomPhotoDecor(block, path, slot, heroWidth, heroHeight) {
   const photo = block.closest('.kv-photo');
-  if (!photo || !placement || !path) return Promise.resolve();
+  if (!photo || !slot || !path) return Promise.resolve();
 
   photo.style.display = '';
   photo.style.right = 'auto';
   photo.style.bottom = 'auto';
   photo.style.height = 'auto';
   photo.style.maxWidth = `${maxKvPhotoWidthPx}px`;
-  photo.style.aspectRatio = '3 / 2';
   setResponsiveBackground(block, path);
+
+  const applySlot = aspectRatio => {
+    photo.style.aspectRatio = `${aspectRatio}`;
+    // Cap the width by the slot width, by the slot height (converted through
+    // the aspect ratio) and by the shared max pixel width, then center the
+    // photo vertically inside its slot. This keeps every photo inside its own
+    // band so none of them overlap each other or the centered copy.
+    const maxWidthFromHeight =
+      (((slot.maxHeight / 100) * heroHeight * aspectRatio) / heroWidth) * 100;
+    const maxWidthCapPct = (maxKvPhotoWidthPx / heroWidth) * 100;
+    const width = Math.min(slot.maxWidth, maxWidthFromHeight, maxWidthCapPct);
+    const heightPct =
+      ((((width / 100) * heroWidth) / aspectRatio) / heroHeight) * 100;
+    photo.style.width = `${width}%`;
+    photo.style.left = `${slot.left}%`;
+    photo.style.top = `${Math.max(0, slot.centerY - heightPct / 2)}%`;
+    photo.style.rotate = `${slot.rotate}deg`;
+  };
 
   const image = new Image();
   return new Promise(resolve => {
     image.onload = () => {
-      let aspectRatio = 3 / 2;
-      if (image.naturalWidth && image.naturalHeight) {
-        aspectRatio = image.naturalWidth / image.naturalHeight;
-        photo.style.aspectRatio = `${image.naturalWidth} / ${image.naturalHeight}`;
-      }
-      let rect = createNonOverlappingPhotoRect(
-        placement,
-        aspectRatio,
-        occupiedRects
-      );
-      if (!rect) {
-        rect = createFallbackPhotoRect(placement, aspectRatio);
-      }
-      occupiedRects.push(rect);
-      photo.style.top = `${rect.top}%`;
-      photo.style.left = `${rect.left}%`;
-      photo.style.width = `${rect.width}%`;
-      photo.style.rotate = `${randomBetween(-2, 2)}deg`;
+      const aspectRatio =
+        image.naturalWidth && image.naturalHeight
+          ? image.naturalWidth / image.naturalHeight
+          : 3 / 2;
+      applySlot(aspectRatio);
       resolve();
     };
     image.onerror = () => {
-      let rect = createNonOverlappingPhotoRect(placement, 3 / 2, occupiedRects);
-      if (!rect) {
-        rect = createFallbackPhotoRect(placement, 3 / 2);
-      }
-      occupiedRects.push(rect);
-      photo.style.top = `${rect.top}%`;
-      photo.style.left = `${rect.left}%`;
-      photo.style.width = `${rect.width}%`;
-      photo.style.rotate = `${randomBetween(-2, 2)}deg`;
+      applySlot(3 / 2);
       resolve();
     };
     image.src = `${path}.webp`;
