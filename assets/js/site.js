@@ -266,19 +266,23 @@ function applyKvRandomDecor(photoBlocks, dotBlocks) {
     { left: 2, centerY: 80, maxWidth: 21, maxHeight: 22, rotate: 8 },
     { left: 76, centerY: 81, maxWidth: 21, maxHeight: 22, rotate: -8 },
   ];
+  // Tape rolls (dots) sit in the left/right side bands only, tucked into the
+  // vertical gaps between the photo slots, plus a couple far above/below the
+  // centered copy. They never enter the central 30-70% column that holds the
+  // headline and lead text.
   const dotPlacements = shuffleItems([
-    { x: [8, 18], y: [32, 47] },
-    { x: [22, 34], y: [22, 38] },
-    { x: [43, 54], y: [18, 32] },
-    { x: [63, 74], y: [22, 38] },
-    { x: [80, 90], y: [34, 50] },
-    { x: [6, 18], y: [56, 72] },
-    { x: [25, 38], y: [66, 82] },
-    { x: [50, 62], y: [68, 84] },
-    { x: [70, 82], y: [58, 76] },
-    { x: [82, 90], y: [70, 80] },
-    { x: [12, 26], y: [12, 24] },
-    { x: [72, 86], y: [10, 22] },
+    { x: [23, 30], y: [10, 18] },
+    { x: [70, 77], y: [8, 16] },
+    { x: [22, 29], y: [33, 41] },
+    { x: [71, 78], y: [33, 41] },
+    { x: [24, 31], y: [58, 66] },
+    { x: [70, 77], y: [60, 68] },
+    { x: [4, 11], y: [40, 48] },
+    { x: [88, 95], y: [40, 48] },
+    { x: [26, 34], y: [88, 95] },
+    { x: [66, 74], y: [88, 95] },
+    { x: [6, 13], y: [72, 80] },
+    { x: [86, 93], y: [70, 78] },
   ]);
 
   const photoUpdates = photoBlocks.map((block, index) =>
@@ -548,19 +552,18 @@ function rectsOverlap(rect, otherRect, gap) {
 
 function setRandomDotDecor(dot, placement, imagePath) {
   if (!dot || !placement) return;
-  const imageNumber = Number(imagePath?.match(/dot-(\d{3})/)?.[1]);
-  const isLargeDot = largeKvDotImageNumbers.has(imageNumber);
-  const size = isLargeDot ? randomBetween(12, 16) : randomBetween(7.2, 10.2);
+  // Keep every tape roll a modest, uniform size and a small drift so they
+  // stay inside the left/right side bands and never wander into the centered
+  // headline and lead copy.
+  const size = randomBetween(6.4, 8.4);
   dot.style.top = `${randomBetween(...placement.y)}%`;
   dot.style.left = `${randomBetween(...placement.x)}%`;
   dot.style.right = 'auto';
   dot.style.bottom = 'auto';
-  dot.style.width = isLargeDot ? `${size}vw` : `${size}rem`;
-  dot.style.height = isLargeDot ? 'auto' : `${size}rem`;
-  const floatX = isLargeDot
-    ? randomSignedBetween(34, 58)
-    : randomSignedBetween(18, 34);
-  const floatY = isLargeDot ? -randomBetween(34, 64) : -randomBetween(22, 42);
+  dot.style.width = `${size}rem`;
+  dot.style.height = `${size}rem`;
+  const floatX = randomSignedBetween(10, 20);
+  const floatY = -randomBetween(14, 26);
   dot.style.removeProperty('rotate');
   dot.style.setProperty('--dot-rotate', `${randomBetween(-13, 13)}deg`);
   dot.style.setProperty('--float-delay', `${randomBetween(-7, 0)}s`);
